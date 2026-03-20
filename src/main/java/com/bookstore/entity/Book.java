@@ -11,11 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "books")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
 public class Book {
@@ -27,8 +23,14 @@ public class Book {
     @Column(nullable = false)
     private String title;
 
+    @Column(name = "title_ru")
+    private String titleRu;
+
     @Column(nullable = false)
     private String author;
+
+    @Column(name = "author_ru")
+    private String authorRu;
 
     @Column(nullable = false, unique = true)
     private String isbn;
@@ -38,6 +40,9 @@ public class Book {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "description_ru", columnDefinition = "TEXT")
+    private String descriptionRu;
 
     @Column(name = "cover_image")
     private String coverImage;

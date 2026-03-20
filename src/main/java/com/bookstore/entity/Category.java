@@ -26,6 +26,9 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "name_ru")
+    private String nameRu;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 

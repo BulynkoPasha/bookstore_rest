@@ -4,6 +4,9 @@ target/
 !**/src/test/**/target/
 .kotlin
 
+# Секреты
+.env
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml

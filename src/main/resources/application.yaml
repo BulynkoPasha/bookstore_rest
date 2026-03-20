@@ -23,6 +23,26 @@ spring:
       write-dates-as-timestamps: false
     default-property-inclusion: non_null
 
+  # Почта
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:your-mail@gmail.com}
+    password: ${MAIL_PASSWORD:your-pass}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+# URL фронтенда — для ссылки в письме
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  mail:
+    from: ${MAIL_USERNAME:your-mail@gmail.com}
+
 # JWT настройки
 jwt:
   secret: ${JWT_SECRET:your-super-secret-key-minimum-256-bits-long-change-in-production}

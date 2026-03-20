@@ -2,4 +2,21 @@ databaseChangeLog:
   - include:
       file: db/migration/db.001-initial-schema.yaml
       relativeToChangelogFile: false
- 
+  - include:
+      file: db/migration/db.002-add-book-translations.yaml
+      relativeToChangelogFile: false
+  - include:
+      file: db/migration/db.003-add-favorites.yaml
+      relativeToChangelogFile: false
+  - include:
+      file: db/migration/db.004-add-author-ru.yaml
+      relativeToChangelogFile: false
+  - include:
+      file: db/migration/db.005-add-phone.yaml
+      relativeToChangelogFile: false
+  - include:
+      file: db/migration/db.006-add-category-name-ru.yaml
+      relativeToChangelogFile: false
+  - include:
+      file: db/migration/db.007-add-password-reset-tokens.yaml
+      relativeToChangelogFile: false

@@ -10,8 +10,12 @@ public record BookRequestDto(
         @NotBlank(message = "Title is required")
         String title,
 
+        String titleRu,
+
         @NotBlank(message = "Author is required")
         String author,
+
+        String authorRu,
 
         @NotBlank(message = "ISBN is required")
         @Pattern(regexp = "^[0-9]{13}$", message = "ISBN must be 13 digits")
@@ -22,9 +26,8 @@ public record BookRequestDto(
         BigDecimal price,
 
         String description,
-
+        String descriptionRu,
         String coverImage,
-
-        // ID категорий для связи книги с категориями
         Set<Long> categoryIds
-) {}
+) {
+}

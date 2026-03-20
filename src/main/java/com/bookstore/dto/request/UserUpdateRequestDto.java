@@ -1,20 +1,9 @@
 package com.bookstore.dto.request;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
-public record UserRegisterRequestDto(
-
-        @NotBlank @Email(message = "Invalid email format")
-        String email,
-
-        @NotBlank @Size(min = 8, max = 64, message = "Password must be 8–64 characters")
-        String password,
-
-        @NotBlank(message = "Please repeat password")
-        String repeatPassword,
+public record UserUpdateRequestDto(
 
         @NotBlank(message = "First name is required")
         String firstName,
@@ -28,5 +17,4 @@ public record UserRegisterRequestDto(
                 message = "Phone must be in international format, e.g. +375291234567"
         )
         String phone
-) {
-}
+) {}

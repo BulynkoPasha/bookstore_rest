@@ -9,13 +9,13 @@ import org.springframework.data.repository.query.Param;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    // Поиск по названию или автору
-    @Query("SELECT b FROM Book b WHERE "
-            + "LOWER(b.title) LIKE LOWER(CONCAT('%', :query, '%')) OR "
-            + "LOWER(b.author) LIKE LOWER(CONCAT('%', :query, '%'))")
+    @Query("SELECT b FROM Book b WHERE " +
+            "LOWER(b.title) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(b.titleRu) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(b.author) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(b.authorRu) LIKE LOWER(CONCAT('%', :query, '%'))")
     Page<Book> search(@Param("query") String query, Pageable pageable);
 
-    // Книги по категории
     @Query("SELECT b FROM Book b JOIN b.categories c WHERE c.id = :categoryId")
     Page<Book> findByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
 

@@ -11,9 +11,10 @@ public interface UserMapper {
     UserResponseDto toDto(User user);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "password", ignore = true)     // пароль кодируется в сервисе
+    @Mapping(target = "password", ignore = true)
     @Mapping(target = "roles", ignore = true)
     @Mapping(target = "isDeleted", ignore = true)
     @Mapping(target = "shoppingCart", ignore = true)
+    @Mapping(target = "favorites", ignore = true)
     User toEntity(UserRegisterRequestDto dto);
 }

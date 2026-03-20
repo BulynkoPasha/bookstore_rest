@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-add-favorites
+      author: bookstore
+      changes:
+        - createTable:
+            tableName: user_favorites
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_favorites_user
+                    references: users(id)
+              - column:
+                  name: book_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_favorites_book
+                    references: books(id)

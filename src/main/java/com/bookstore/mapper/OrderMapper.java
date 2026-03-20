@@ -12,6 +12,10 @@ import org.mapstruct.ReportingPolicy;
 public interface OrderMapper {
 
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.firstName", target = "userFirstName")
+    @Mapping(source = "user.lastName", target = "userLastName")
+    @Mapping(source = "user.email", target = "userEmail")
+    @Mapping(source = "user.phone", target = "userPhone")
     OrderResponseDto toDto(Order order);
 
     @Mapping(source = "book.id", target = "bookId")

@@ -7,5 +7,5 @@ public record OrderItemResponseDto(
         Long bookId,
         String bookTitle,
         int quantity,
-        BigDecimal price   // цена на момент заказа
+        BigDecimal price
 ) {}

@@ -8,12 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-
     Page<Review> findByBookId(Long bookId, Pageable pageable);
+
+    Page<Review> findByUserId(Long userId, Pageable pageable);
 
     boolean existsByUserIdAndBookId(Long userId, Long bookId);
 
-    // Средний рейтинг книги
     @Query("SELECT AVG(r.rating) FROM Review r WHERE r.book.id = :bookId")
     Double findAverageRatingByBookId(@Param("bookId") Long bookId);
 }

@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-add-book-translations
+      author: bookstore
+      changes:
+        - addColumn:
+            tableName: books
+            columns:
+              - column:
+                  name: title_ru
+                  type: VARCHAR(255)
+              - column:
+                  name: description_ru
+                  type: TEXT

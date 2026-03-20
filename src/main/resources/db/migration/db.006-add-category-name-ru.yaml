@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-add-category-name-ru
+      author: bookstore
+      changes:
+        - addColumn:
+            tableName: categories
+            columns:
+              - column:
+                  name: name_ru
+                  type: VARCHAR(100)

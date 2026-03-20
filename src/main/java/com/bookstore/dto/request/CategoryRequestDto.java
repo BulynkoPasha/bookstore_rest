@@ -7,5 +7,7 @@ public record CategoryRequestDto(
         @NotBlank(message = "Category name is required")
         String name,
 
+        String nameRu,
+
         String description
 ) {}
