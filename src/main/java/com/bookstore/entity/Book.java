@@ -47,6 +47,9 @@ public class Book {
     @Column(name = "cover_image")
     private String coverImage;
 
+    @Column(name = "published_year")
+    private Integer publishedYear;
+
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
 

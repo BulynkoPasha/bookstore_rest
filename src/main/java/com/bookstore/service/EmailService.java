@@ -23,9 +23,15 @@ public class EmailService {
     @Value("${app.frontend-url}")
     private String frontendUrl;
 
+
+
     // @Async — письмо отправляется в фоновом потоке, не блокируя HTTP ответ
     @Async
     public void sendPasswordResetEmail(String toEmail, String token, String language) {
+        if (from == null || from.isBlank()) {
+            log.warn("Mail not configured, skipping email to {}", toEmail);
+            return;
+        }
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");

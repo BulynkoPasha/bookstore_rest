@@ -28,6 +28,7 @@ public record BookRequestDto(
         String description,
         String descriptionRu,
         String coverImage,
+        Integer publishedYear,
         Set<Long> categoryIds
 ) {
 }

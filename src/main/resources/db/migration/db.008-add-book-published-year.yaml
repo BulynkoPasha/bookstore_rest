@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-add-book-published-year
+      author: bookstore
+      changes:
+        - addColumn:
+            tableName: books
+            columns:
+              - column:
+                  name: published_year
+                  type: INT

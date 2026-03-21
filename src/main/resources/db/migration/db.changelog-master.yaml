@@ -20,3 +20,6 @@ databaseChangeLog:
   - include:
       file: db/migration/db.007-add-password-reset-tokens.yaml
       relativeToChangelogFile: false
+  - include:
+      file: db/migration/db.008-add-book-published-year.yaml
+      relativeToChangelogFile: false

@@ -14,6 +14,6 @@ public record BookResponseDto(
         String description,
         String descriptionRu,
         String coverImage,
+        Integer publishedYear,
         Set<CategoryResponseDto> categories
-) {
-}
+) {}
