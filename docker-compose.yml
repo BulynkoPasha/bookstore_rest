@@ -1,3 +1,73 @@
+#version: '3.8'
+#
+## ============================================================
+## Продакшен Docker Compose
+## Запуск: docker-compose up --build
+## Остановка: docker-compose down
+## Сброс данных: docker-compose down -v
+## ============================================================
+#
+#services:
+#
+#  # ---- База данных PostgreSQL ----
+#  db:
+#    image: postgres:15-alpine
+#    container_name: bookstore-db
+#    environment:
+#      POSTGRES_DB:       bookstore_db
+#      POSTGRES_USER:     postgres
+#      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+#    volumes:
+#      - bookstore_data:/var/lib/postgresql/data
+#    ports:
+#      - "5432:5432"           # убери эту строку в продакшене если не нужен внешний доступ
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U postgres"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    restart: unless-stopped
+#
+#  # ---- Spring Boot бэкенд ----
+#  backend:
+#    build:
+#      context: .              # папка bookstore_rest
+#      dockerfile: Dockerfile
+#    container_name: bookstore-backend
+#    environment:
+#      # Подключение к БД — используем имя сервиса "db" вместо localhost
+#      SPRING_DATASOURCE_URL:      jdbc:postgresql://db:5432/bookstore_db
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-postgres}
+#      # JWT
+#      JWT_SECRET:                 ${JWT_SECRET:-your-super-secret-key-minimum-256-bits-long-change-in-production}
+#      # Почта
+#      MAIL_USERNAME:              ${MAIL_USERNAME:-your-email@gmail.com}
+#      MAIL_PASSWORD:              ${MAIL_PASSWORD:-your-app-password}
+#      # URL фронтенда для ссылок в письмах
+#      FRONTEND_URL:               ${FRONTEND_URL:-http://localhost}
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      db:
+#        condition: service_healthy  # ждём пока PostgreSQL будет готов
+#    restart: unless-stopped
+#
+#  # ---- React фронтенд (Nginx) ----
+#  frontend:
+#    build:
+#      context: ../bookstore-frontend  # папка рядом с бэком
+#      dockerfile: Dockerfile
+#    container_name: bookstore-frontend
+#    ports:
+#      - "80:80"               # сайт доступен на http://localhost
+#    depends_on:
+#      - backend
+#    restart: unless-stopped
+#
+#volumes:
+#  bookstore_data:
+#    name: bookstore_data      # именованный volume — данные сохраняются между перезапусками
 version: '3.8'
 
 services:

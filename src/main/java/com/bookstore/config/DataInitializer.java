@@ -37,6 +37,7 @@ public class DataInitializer implements ApplicationRunner {
         log.info("Seeding database...");
 
         Role adminRole = roleRepository.findByName(Role.RoleName.ROLE_ADMIN).orElseThrow();
+        Role managerRole = roleRepository.findByName(Role.RoleName.ROLE_MANAGER).orElseThrow();
         Role userRole  = roleRepository.findByName(Role.RoleName.ROLE_USER).orElseThrow();
 
         Category fiction     = save(cat("Fiction",     "Художественная литература", "Classic and contemporary fiction novels"));
@@ -48,6 +49,7 @@ public class DataInitializer implements ApplicationRunner {
         Category mystery     = save(cat("Mystery",     "Детективы и триллеры", "Crime, thriller and detective stories"));
 
         User admin = createUser("admin@bookstore.com", "Admin1234!", "Admin",  "Bookstore", "123 Admin St, New York",      "+375291234567", Set.of(adminRole, userRole));
+        User manager = createUser("manager@bookstore.com", "Manager1234!", "Manager",  "Bookstore", "123 Manager St, New York",      "+375291234577", Set.of(managerRole, userRole));
         User alice = createUser("alice@mail.com",      "Alice1234!", "Alice",  "Johnson",   "456 Oak Ave, Los Angeles",    "+375331234568", Set.of(userRole));
         User bob   = createUser("bob@mail.com",        "Bob12345!",  "Bob",    "Smith",     "789 Pine Rd, Chicago",        "+79161234569", Set.of(userRole));
         User carol = createUser("carol@mail.com",      "Carol123!",  "Carol",  "Williams",  "321 Elm St, Houston",         "+375441234570", Set.of(userRole));

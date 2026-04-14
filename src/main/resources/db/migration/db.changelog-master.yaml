@@ -23,3 +23,9 @@ databaseChangeLog:
   - include:
       file: db/migration/db.008-add-book-published-year.yaml
       relativeToChangelogFile: false
+  - include:
+      file: db/migration/db.009-add-audit-log.yaml
+      relativeToChangelogFile: false
+  - include:
+      file: db/migration/db.010-add-manager-role.yaml
+      relativeToChangelogFile: false

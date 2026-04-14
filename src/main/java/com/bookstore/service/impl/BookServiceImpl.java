@@ -4,10 +4,12 @@ import com.bookstore.dto.request.BookRequestDto;
 import com.bookstore.dto.response.BookResponseDto;
 import com.bookstore.exception.EntityNotFoundException;
 import com.bookstore.mapper.BookMapper;
+import com.bookstore.entity.AuditLog;
 import com.bookstore.entity.Book;
 import com.bookstore.entity.Category;
 import com.bookstore.repository.BookRepository;
 import com.bookstore.repository.CategoryRepository;
+import com.bookstore.service.AuditService;
 import com.bookstore.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
+    private final AuditService auditService;
 
     @Override
     public Page<BookResponseDto> findAll(Pageable pageable) {
@@ -46,34 +49,56 @@ public class BookServiceImpl implements BookService {
     public BookResponseDto save(BookRequestDto dto) {
         Book book = bookMapper.toEntity(dto);
         book.setCategories(resolveCategories(dto.categoryIds()));
-        return bookMapper.toDto(bookRepository.save(book));
+        Book saved = bookRepository.save(book);
+
+        auditService.log(
+                AuditLog.Action.BOOK_CREATED,
+                "Book", saved.getId(), saved.getTitle(),
+                "ISBN: " + saved.getIsbn() + ", Price: " + saved.getPrice()
+        );
+
+        return bookMapper.toDto(saved);
     }
 
     @Override
     @Transactional
     public BookResponseDto update(Long id, BookRequestDto dto) {
         Book book = getBookOrThrow(id);
+        String oldTitle = book.getTitle();
         bookMapper.updateEntityFromDto(dto, book);
         if (dto.categoryIds() != null) {
             book.setCategories(resolveCategories(dto.categoryIds()));
         }
-        return bookMapper.toDto(bookRepository.save(book));
+        Book saved = bookRepository.save(book);
+
+        auditService.log(
+                AuditLog.Action.BOOK_UPDATED,
+                "Book", saved.getId(), saved.getTitle(),
+                "Updated: " + oldTitle + " → " + saved.getTitle()
+        );
+
+        return bookMapper.toDto(saved);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        getBookOrThrow(id);
-        bookRepository.deleteById(id);  // Soft delete через @SQLDelete
+        Book book = getBookOrThrow(id);
+        String title = book.getTitle();
+        bookRepository.deleteById(id);
+        
+        auditService.log(
+                AuditLog.Action.BOOK_DELETED,
+                "Book", id, title,
+                "Soft deleted book: " + title
+        );
     }
 
-    // Вспомогательный метод — получить книгу или выбросить 404
     private Book getBookOrThrow(Long id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
     }
 
-    // Загрузить категории по списку ID из запроса
     private Set<Category> resolveCategories(Set<Long> ids) {
         if (ids == null || ids.isEmpty()) return new HashSet<>();
         Set<Category> categories = new HashSet<>(categoryRepository.findAllById(ids));

@@ -3,11 +3,15 @@ package com.bookstore.service.impl;
 import com.bookstore.dto.request.OrderRequestDto;
 import com.bookstore.dto.request.OrderStatusRequestDto;
 import com.bookstore.dto.response.OrderResponseDto;
+import com.bookstore.entity.AuditLog;
+import com.bookstore.entity.Order;
+import com.bookstore.entity.OrderItem;
+import com.bookstore.entity.ShoppingCart;
 import com.bookstore.exception.EntityNotFoundException;
 import com.bookstore.mapper.OrderMapper;
-import com.bookstore.entity.*;
 import com.bookstore.repository.OrderRepository;
 import com.bookstore.repository.ShoppingCartRepository;
+import com.bookstore.service.AuditService;
 import com.bookstore.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ShoppingCartRepository cartRepository;
     private final OrderMapper orderMapper;
+    private final AuditService auditService;
 
     @Override
     @Transactional
@@ -60,7 +65,15 @@ public class OrderServiceImpl implements OrderService {
 
         cart.getCartItems().clear();
         cartRepository.save(cart);
-        return orderMapper.toDto(orderRepository.save(order));
+        com.bookstore.entity.Order saved = orderRepository.save(order);
+        String userName = saved.getUser().getFirstName() + " " + saved.getUser().getLastName()
+                + " (" + saved.getUser().getEmail() + ")";
+        auditService.log(
+                AuditLog.Action.ORDER_STATUS_CHANGED,
+                "Order", saved.getId(), "Order #" + saved.getId(),
+                "Order placed by: " + userName + ", total: " + saved.getTotal()
+        );
+        return orderMapper.toDto(saved);
     }
 
     @Override
@@ -82,8 +95,17 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDto updateStatus(Long orderId, OrderStatusRequestDto dto) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found: " + orderId));
-        order.setStatus(dto.status());
-        return orderMapper.toDto(orderRepository.save(order));
+        com.bookstore.entity.Order.Status oldStatus = order.getStatus();
+        com.bookstore.entity.Order.Status newStatus = dto.status();
+
+        order.setStatus(newStatus);
+        com.bookstore.entity.Order saved = orderRepository.save(order);
+        auditService.log(
+                AuditLog.Action.ORDER_STATUS_CHANGED,
+                "Order", orderId, "Order #" + orderId,
+                oldStatus + " → " + newStatus
+        );
+        return orderMapper.toDto(saved);
     }
 
     @Override

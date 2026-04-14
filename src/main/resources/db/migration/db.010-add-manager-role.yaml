@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-add-manager-role
+      author: bookstore
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: name, value: ROLE_MANAGER }

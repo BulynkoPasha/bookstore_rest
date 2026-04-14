@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 public record ReviewResponseDto(
         Long id,
         Long bookId,
+        String bookTitle,
+        String bookTitleRu,
         Long userId,
         String userFirstName,
         int rating,
